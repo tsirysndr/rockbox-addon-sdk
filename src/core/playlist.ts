@@ -1,3 +1,6 @@
+import { encode } from "node:querystring";
+import { client } from "./client.ts";
+
 function getResumeInfo() {}
 
 function getTrackInfo() {}
@@ -8,18 +11,24 @@ function getDisplayIndex() {}
 
 function amount() {}
 
-function playlistResume() {}
+async function playlistResume(): Promise<void> {
+  await client.put("/playlists/resume");
+}
 
-function resumeTrack(
-  startIndex: number,
-  crc: number,
-  offset: number,
-  elapsed: number
-) {}
+async function resumeTrack(): Promise<void> {
+  await client.put("/playlists/resume-track");
+}
 
 function setModified() {}
 
-function start(startIndex: number, elapsed: number, offset: number) {}
+async function start(
+  startIndex: number,
+  elapsed: number,
+  offset: number
+): Promise<void> {
+  const q = encode({ start_index: startIndex, elapsed, offset });
+  await client.put(`/playlists/start?${q}`);
+}
 
 function sync() {}
 
