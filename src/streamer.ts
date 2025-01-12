@@ -1,6 +1,6 @@
-import RockboxExtension from "./extension.ts";
+import { RockboxExtension } from "./extension.ts";
 
-abstract class MediaStreamer extends RockboxExtension {
+export abstract class MediaStreamer extends RockboxExtension {
   abstract stream(mediaUrl: string, target: string): Promise<void>;
   abstract stop(): Promise<void>;
   abstract pause(): Promise<void>;
@@ -16,5 +16,3 @@ abstract class MediaStreamer extends RockboxExtension {
     }>
   >;
 }
-
-export default MediaStreamer;

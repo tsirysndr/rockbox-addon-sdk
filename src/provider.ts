@@ -1,6 +1,6 @@
-import RockboxExtension from "./extension.ts";
+import { RockboxExtension } from "./extension.ts";
 
-abstract class MusicProvider extends RockboxExtension {
+export abstract class MusicProvider extends RockboxExtension {
   abstract browse(
     path?: string
   ): Promise<Array<{ name: string; type: "file" | "directory"; path: string }>>;

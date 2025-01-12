@@ -1,4 +1,9 @@
-function getAlbums() {}
+import { ROCKBOX_API_URL } from "./consts.ts";
+
+async function getAlbums(): Promise<any[]> {
+  const response = await fetch(`${ROCKBOX_API_URL}/albums`);
+  return response.json();
+}
 
 function getArtists() {}
 

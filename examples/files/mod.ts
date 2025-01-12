@@ -1,4 +1,4 @@
-import MusicProvider from "../../src/provider.ts";
+import { MusicProvider } from "../../mod.ts";
 
 class FilesProvider extends MusicProvider {
   constructor() {

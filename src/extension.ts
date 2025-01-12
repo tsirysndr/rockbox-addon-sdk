@@ -11,7 +11,7 @@ export type ExtensionMetadata = {
   supportedUrls?: string[];
 };
 
-abstract class RockboxExtension {
+export abstract class RockboxExtension {
   constructor(public readonly metadata: ExtensionMetadata) {}
 
   abstract initialize(): void;
@@ -19,5 +19,3 @@ abstract class RockboxExtension {
 
   abstract getMetadata(): ExtensionMetadata;
 }
-
-export default RockboxExtension;
