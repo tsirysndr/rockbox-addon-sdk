@@ -9,11 +9,16 @@ class RockboxProvider extends MusicProvider {
       license: "MIT",
       description:
         "This extension allows you to explore media files on other devices running Rockbox.",
+      supportedUrls: ["rockbox://"],
     });
   }
 
   initialize() {
     console.log("Rockbox Provider initialized");
+  }
+
+  connect(host: string, port: number): Promise<void> {
+    throw new Error("Method not implemented.");
   }
 
   getMetadata() {

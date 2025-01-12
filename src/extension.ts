@@ -8,6 +8,7 @@ export type ExtensionMetadata = {
   description?: string;
   repository?: string;
   homepage?: string;
+  supportedUrls?: string[];
 };
 
 abstract class RockboxExtension {
