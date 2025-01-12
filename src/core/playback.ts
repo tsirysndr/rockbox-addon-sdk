@@ -1,40 +1,103 @@
-function play(elapsed: number, offset: number) {}
+import { client } from "./client.ts";
+import type {
+  PlayAlbumOptions,
+  PlayAllTracksOptions,
+  PlayArtistTracksOptions,
+  PlayDirectoryOptions,
+  PlayLikedTracksOptions,
+  PlayPlaylistOptions,
+} from "./types/options.ts";
+import type { CurrentTrack, NextTrack } from "./types/track.ts";
+import camelcaseKeys from "camelcase-keys";
+import { encode } from "node:querystring";
 
-function pause() {}
+async function play(elapsed: number, offset: number): Promise<void> {
+  const q = encode({ elapsed, offset });
+  await client.put(`/player/play?${q}`);
+}
 
-function resume() {}
+async function pause(): Promise<void> {
+  await client.put("/player/pause");
+}
 
-function next() {}
+async function resume(): Promise<void> {
+  await client.put("/player/resume");
+}
 
-function previous() {}
+async function next(): Promise<void> {
+  await client.put("/player/next");
+}
 
-function fastForwardRewind(newTime: number) {}
+async function previous(): Promise<void> {
+  await client.put("/player/previous");
+}
 
-function status() {}
+async function fastForwardRewind(newTime: number): Promise<void> {
+  await client.put(`/player/ff-rewind?time=${newTime}`);
+}
 
-function currentTrack() {}
+async function status(): Promise<{ status: number }> {
+  const { data } = await client.get("/player/status");
+  return data;
+}
 
-function nextTrack() {}
+async function currentTrack(): Promise<CurrentTrack> {
+  const { data } = await client.get("/player/current-track");
+  return camelcaseKeys(data);
+}
 
-function flushAndReloadTracks() {}
+async function nextTrack(): Promise<NextTrack> {
+  const { data } = await client.get("/player/next-track");
+  return camelcaseKeys(data);
+}
 
-function getFilePosition() {}
+async function flushAndReloadTracks(): Promise<void> {
+  await client.put("/player/flush-reload-tracks");
+}
 
-function hardStop() {}
+async function getFilePosition() {
+  // TODO: Implement
+}
 
-function playAlbum(options: any) {}
+async function hardStop(): Promise<void> {
+  await client.put("/player/stop");
+}
 
-function playAllTracks(options: any) {}
+async function playAlbum(options: PlayAlbumOptions): Promise<void> {
+  const { albumId, shuffle } = options;
+  await client.put(`/albums/${albumId}/play`, { shuffle });
+}
 
-function playArtistTracks(options: any) {}
+async function playAllTracks(options: PlayAllTracksOptions): Promise<void> {
+  const { shuffle, position } = options;
+  await client.put("/tracks/play-all", { shuffle, position });
+}
 
-function playDirectory(options: any) {}
+async function playArtistTracks(
+  options: PlayArtistTracksOptions
+): Promise<void> {
+  const { artistId, shuffle, position } = options;
+  await client.put(`/artists/${artistId}/play`, { shuffle, position });
+}
 
-function playLikedTracks(options: any) {}
+async function playDirectory(options: PlayDirectoryOptions): Promise<void> {
+  const { path, shuffle, recurse, position } = options;
+  await client.put("/browse/play", { path, shuffle, recurse, position });
+}
 
-function playPlaylist(options: any) {}
+async function playLikedTracks(options: PlayLikedTracksOptions): Promise<void> {
+  const { shuffle, position } = options;
+  await client.put("/likes/play", { shuffle, position });
+}
 
-function playTrack(path: string) {}
+async function playPlaylist(options: PlayPlaylistOptions): Promise<void> {
+  const { playlistId, shuffle } = options;
+  await client.put(`/playlists/${playlistId}/play`, { shuffle });
+}
+
+async function playTrack(path: string): Promise<void> {
+  await client.put("/tracks/play", { path });
+}
 
 export default {
   play,

@@ -1,8 +1,11 @@
-import { ROCKBOX_API_URL } from "./consts.ts";
+// deno-lint-ignore-file no-explicit-any
+import { client } from "./client.ts";
+import type { Entry } from "./types/entry.ts";
+import camelcaseKeys from "camelcase-keys";
 
-async function getEntries(): Promise<any> {
-  const response = await fetch(`${ROCKBOX_API_URL}/browse/tree-entries`);
-  return response.json();
+async function getEntries(): Promise<Entry[]> {
+  const { data } = await client.get(`/browse/tree-entries`);
+  return data.map((entry: any) => camelcaseKeys(entry));
 }
 
 export default {

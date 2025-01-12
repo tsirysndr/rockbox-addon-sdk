@@ -1,31 +1,67 @@
-import { ROCKBOX_API_URL } from "./consts.ts";
+// deno-lint-ignore-file no-explicit-any
+import { client } from "./client.ts";
+import type { Album } from "./types/album.ts";
+import type { Artist } from "./types/artist.ts";
+import type { SearchResult } from "./types/results.ts";
+import type { Track } from "./types/track.ts";
+import camelcaseKeys from "camelcase-keys";
 
-async function getAlbums(): Promise<any[]> {
-  const response = await fetch(`${ROCKBOX_API_URL}/albums`);
-  return response.json();
+async function getAlbums(): Promise<Album[]> {
+  const { data } = await client.get("/albums");
+  return data.map((album: any) => camelcaseKeys(album));
 }
 
-function getArtists() {}
+async function getArtists(): Promise<Artist[]> {
+  const { data } = await client("/artists");
+  return data.map((artist: any) => camelcaseKeys(artist));
+}
 
-function getTracks() {}
+async function getTracks(): Promise<Track[]> {
+  const { data } = await client.get("/tracks");
+  return data.map((track: any) => camelcaseKeys(track));
+}
 
-function getAlbum(id: string) {}
+async function getAlbum(id: string): Promise<Album> {
+  const { data } = await client.get(`/albums/${id}`);
+  return camelcaseKeys(data);
+}
 
-function getArtist(id: string) {}
+async function getArtist(id: string): Promise<Artist> {
+  const { data } = await client.get(`/artists/${id}`);
+  return camelcaseKeys(data);
+}
 
-function getTrack(id: string) {}
+async function getTrack(id: string): Promise<Track> {
+  const { data } = await client.get(`/tracks/${id}`);
+  return camelcaseKeys(data);
+}
 
-function likeTrack(id: string) {}
+async function likeTrack(id: string): Promise<void> {
+  await client.post(`/tracks/${id}/like`);
+}
 
-function unlikeTrack(id: string) {}
+async function unlikeTrack(id: string): Promise<void> {
+  await client.delete(`/tracks/${id}/like`);
+}
 
-function getLikedTracks() {}
+async function getLikedTracks(): Promise<Track[]> {
+  const { data } = await client.get("/likes");
+  return data.map((track: any) => camelcaseKeys(track));
+}
 
-function getLikedAlbums() {}
+async function getLikedAlbums(): Promise<Album[]> {
+  const { data } = await client.get("/likes/albums");
+  return data.map((album: any) => camelcaseKeys(album));
+}
 
-function scanLibrary(path: string) {}
+async function scanLibrary(path: string): Promise<void> {
+  await client.put("/scan-library", { path });
+}
 
-function search(query: string) {}
+async function search(query: string): Promise<SearchResult[]> {
+  const { data } = await client.get(`/search?q=${query}`);
+  return data.map((result: any) => camelcaseKeys(result));
+}
 
 export default {
   getAlbums,

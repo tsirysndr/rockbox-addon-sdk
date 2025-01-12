@@ -1,8 +1,9 @@
 // deno-lint-ignore-file ban-types
 import { cyan } from "@std/fmt/colors";
 import { z } from "zod";
+import metadata from "../deno.json" with { type: "json" };
 
-const ROCKBOX_SDK_VERSION = "0.1.0";
+const ROCKBOX_SDK_VERSION = metadata.version;
 
 const schema = z.object({
   extension: z.string().optional(),
