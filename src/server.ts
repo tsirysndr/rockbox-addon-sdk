@@ -1,7 +1,16 @@
 // deno-lint-ignore-file ban-types
 import { cyan } from "@std/fmt/colors";
+import { z } from "zod";
 
 const ROCKBOX_SDK_VERSION = "0.1.0";
+
+const schema = z.object({
+  extension: z.string().optional(),
+  method: z.string(),
+  args: z.array(z.any()).optional().default([]),
+});
+
+type Params = z.infer<typeof schema>;
 
 export function serveWS(extensions: Record<string, Record<string, Function>>) {
   const totalExtensions = Object.keys(extensions).length;
@@ -20,14 +29,19 @@ export function serveWS(extensions: Record<string, Record<string, Function>>) {
 
       socket.onmessage = async (event) => {
         try {
-          // Parse the incoming message (expecting JSON format)
-          const { extension, method, args } = JSON.parse(event.data);
+          const { extension, method, args } = schema.parse(
+            JSON.parse(event.data) as Params
+          );
 
           if (method === "listExtensions") {
             socket.send(
               JSON.stringify({ success: true, result: Object.keys(extensions) })
             );
             return;
+          }
+
+          if (!extension) {
+            throw new Error("Extension name is required");
           }
 
           // Ensure the extension and method exist
