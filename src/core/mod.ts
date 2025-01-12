@@ -1,4 +1,4 @@
-import RockboxSDK from "../sdk.ts";
+import { RockboxSDK } from "../sdk.ts";
 import browse from "./browse.ts";
 import library from "./library.ts";
 import playback from "./playback.ts";
