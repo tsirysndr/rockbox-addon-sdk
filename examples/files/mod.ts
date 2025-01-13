@@ -20,20 +20,26 @@ class FilesProvider extends MusicProvider {
     return this.metadata;
   }
 
+  // deno-lint-ignore no-explicit-any
+  on(event: string, data: any): Promise<void> {
+    console.log("> FilesProvider received event:", event, data);
+    throw new Error("Method not implemented.");
+  }
+
   override browse(
-    path?: string
+    _path?: string
   ): Promise<
     Array<{ name: string; type: "file" | "directory"; path: string }>
   > {
     throw new Error("Method not implemented.");
   }
-  override download(filePath: string, destination: string): Promise<void> {
+  override download(_filePath: string, _destination: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  override play(filePath: string): Promise<void> {
+  override play(_filePath: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  override upload(filePath: string, destination: string): Promise<void> {
+  override upload(_filePath: string, _destination: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
   override shutdown(): void {

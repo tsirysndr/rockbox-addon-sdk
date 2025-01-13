@@ -17,7 +17,7 @@ class RockboxProvider extends MusicProvider {
     console.log("Rockbox Provider initialized");
   }
 
-  connect(host: string, port: number): Promise<void> {
+  connect(_host: string, _port: number): Promise<void> {
     throw new Error("Method not implemented.");
   }
 
@@ -26,19 +26,19 @@ class RockboxProvider extends MusicProvider {
   }
 
   override browse(
-    path?: string
+    _path?: string
   ): Promise<
     Array<{ name: string; type: "file" | "directory"; path: string }>
   > {
     throw new Error("Method not implemented.");
   }
-  override download(filePath: string, destination: string): Promise<void> {
+  override download(_filePath: string, _destination: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  override play(filePath: string): Promise<void> {
+  override play(_filePath: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  override upload(filePath: string, destination: string): Promise<void> {
+  override upload(_filePath: string, _destination: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
   override shutdown(): void {

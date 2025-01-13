@@ -5,11 +5,21 @@ import metadata from "../deno.json" with { type: "json" };
 
 const ROCKBOX_SDK_VERSION = metadata.version;
 
-const schema = z.object({
+const RbRequestSchema = z.object({
   extension: z.string().optional(),
   method: z.string(),
   args: z.array(z.any()).optional().default([]),
 });
+
+const RbEventSchema = z.object({
+  event: z.string(),
+  data: z.any(),
+});
+
+const schema = z.union([RbRequestSchema, RbEventSchema]);
+
+type RbRequest = z.infer<typeof RbRequestSchema>;
+type RbEvent = z.infer<typeof RbEventSchema>;
 
 type Params = z.infer<typeof schema>;
 
@@ -32,7 +42,20 @@ export function serveWS(extensions: Record<string, Record<string, Function>>) {
         try {
           const { extension, method, args } = schema.parse(
             JSON.parse(event.data) as Params
-          );
+          ) as RbRequest;
+
+          const { event: rbevent, data } = schema.parse(
+            JSON.parse(event.data) as Params
+          ) as RbEvent;
+
+          if (rbevent) {
+            for (const [name] of Object.entries(extensions)) {
+              if (extensions[name] && extensions[name]['on']) {
+                await extensions[name]['on'](rbevent, data);
+              }
+            }
+            return;
+          }
 
           if (method === "listExtensions") {
             socket.send(
