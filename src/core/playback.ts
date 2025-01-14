@@ -8,7 +8,7 @@ import type {
   PlayPlaylistOptions,
 } from "./types/options.ts";
 import type { CurrentTrack, NextTrack } from "./types/track.ts";
-import camelcaseKeys from "camelcase-keys";
+import { camelcaseKeys } from "../../deps.ts";
 import { encode } from "node:querystring";
 
 async function play(elapsed: number, offset: number): Promise<void> {

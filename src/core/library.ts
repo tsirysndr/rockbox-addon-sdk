@@ -4,7 +4,7 @@ import type { Album } from "./types/album.ts";
 import type { Artist } from "./types/artist.ts";
 import type { SearchResult } from "./types/results.ts";
 import type { Track } from "./types/track.ts";
-import camelcaseKeys from "camelcase-keys";
+import { camelcaseKeys } from "../../deps.ts";
 
 async function getAlbums(): Promise<Album[]> {
   const { data } = await client.get("/albums");
