@@ -1,7 +1,7 @@
 // deno-lint-ignore-file ban-types
 import type { MusicProvider } from "./provider.ts";
 import type { MediaStreamer } from "./streamer.ts";
-import { cyan, green, yellow, bgGreen } from "@std/fmt/colors";
+import { cyan, green, yellow, bgGreen } from "../deps.ts";
 
 export class RockboxSDK {
   private providers: MusicProvider[] = [];
